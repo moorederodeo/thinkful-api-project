@@ -1,3 +1,27 @@
+html {
+	height:100%;	
+}
+
+body {
+	height: 100%;
+}
+
+#gmap {
+	float:left;
+	height: 800px;
+	width: 600px;
+}
+
 .header {
 	text-align: center;
+}
+
+.navigation {
+	float:left;
+	width:30%;
+	height:100%;
+}
+
+.googlemaps {
+	width:100%;
 }
