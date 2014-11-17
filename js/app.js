@@ -1,4 +1,11 @@
 $(function () {
+	var fillerHeight = 120;
+	var mapWidth = $('.mapcontainer').width();
+	var height = $(window).height();
+	$('#gmap').width(mapWidth).height(height);
+	$('.navigation').height(height);
+	$('.petitions').height(height-fillerHeight);
+
 	var map = new Maplace({
 		map_options: {
 			set_center: [41.850033, -87.6500523],
@@ -17,11 +24,12 @@ $(function () {
 	var jsonpURL20 = '.jsonp?limit=20&offset=0&callback=?';
 
 	var sigToMaplace = function(zip, name) {
+		var zipLatLong = zipArray[zip];
 		if (signatures[zip]){
-			signatures[results[i].zip].names.push(results[i].name);
+			signatures[zip].html += ", " + name;
 		}
-		else {
-			signatures[results[i].zip] = {names: [results[i].name], zip: results[i].zip};
+		else if (zipLatLong){
+			signatures[zip] = {html: "Signature(s): " + name, lat: zipLatLong.lat, lon: zipLatLong.lon, title: zip};
 		}
 	};
 
@@ -47,11 +55,13 @@ $(function () {
 			}
 			//add the results to petitions
 			petitions = results;
+
+			console.log(petitions);
 			//clear previous petitions
 			$('.petition').remove();
 			//add new petitions to DOM
 			for (i in petitions) {
-				$('.petitions').append('<li class="petition" id="'+i+'"><h3 class="petition_title">'+petitions[i].title+'</h3></li>');
+				$('.petitions').append('<li class="petition" id="'+i+'"><h5 class="petition_title">'+petitions[i].title+'</h5><p>Signatures: '+petitions[i].signatureCount+'</p><a href="'+petitions[i].url+'">View Petition</a></li>');
 			}
 		});
 	};
@@ -83,35 +93,45 @@ $(function () {
 				//remove non zip-codes
 				return i.zip && !isNaN(+i.zip);
 			})
+
+			//console.log(results);
 			
-			results.every(function(i) {
-				//change sigs into maplace locations and add to 
-				signatures[i.zip] = sigToMaplace(i.zip, i.name);
+			results.forEach(function(i) {
+				//change sigs into maplace locations and add to signatures
+				sigToMaplace(i.zip, i.name);
 			});
 
-
-			console.log(signatures);
+			signatures = signatures.filter(function(i) {
+				return i;
+			})
+			.map(function(i){
+				i.zoom = 8;
+				i.visible = true;
+				return i;
+			});
 
 			//add the petitions to map
+			$('#gmap').children().remove();
+
+			map = new Maplace({
+				locations: signatures,
+				map_options: {
+					set_center: [41.850033, -87.6500523],
+					zoom:3
+				}
+			}).Load();
+
+			//console.log(signatures);
+
 		});
 	});
 
 	$('select').change(function () {
 		var status = $('.status option:selected').text();
 		var sort = $('.sort option:selected').text();
-		console.log(status);
+		//console.log(status);
 		getPetitions(sort, status);
 	});
-	/*
-
-
-	console.log(signatures.filter(function(i) {
-		return i.names.length > 1;
-	}));
-	*/
-
-	// This next function will update the list when the sort or status update
-
 
 	getPetitions("signatures", "responded");
 
@@ -121,11 +141,20 @@ $(function () {
 	    complete: function(data){
 	        var results = data.responseText;
 	        results = $.csv.toObjects(results);
-	        //move results to zipAarray
-	        results.every(function(i){
+	        //move results to zipArray
+	        //console.log(results);
+	        results.forEach(function(i){
 	        	zipArray[i.Zipcode] = {lat: i.Lat, lon: i.Long};
 	        });
-	        console.log(zipArray);
+	        //console.log(zipArray);
 	    }
+	});
+
+	$(window).resize(function () {
+		mapWidth = $('.mapcontainer').width();
+		height = $(window).height();
+		$('#gmap').width(mapWidth).height(height);
+		$('.navigation').height(height);
+		$('.petitions').height(height-fillerHeight);
 	});
 });

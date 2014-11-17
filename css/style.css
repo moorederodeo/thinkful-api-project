@@ -6,22 +6,36 @@ body {
 	height: 100%;
 }
 
-#gmap {
-	float:left;
-	height: 800px;
-	width: 600px;
-}
-
-.header {
+.navigation {
+	max-height:900px;
 	text-align: center;
 }
 
-.navigation {
-	float:left;
-	width:30%;
-	height:100%;
+.petitions {
+	overflow:auto;
+	margin: 0 .5em;
 }
 
-.googlemaps {
-	width:100%;
+.petition {
+	text-align: center;
+	padding: .25em .5em .25em;
 }
+
+.petition:hover {
+	background-color: #EEEEEE;
+}
+
+	.petition > p, .petition > a {
+		font-size: .83em;
+	}
+
+#gmap {
+	height: 500px;
+	width: 600px;
+	margin:0 .15em;
+	border: 1px solid #B7B7B7;
+}
+
+
+
+
