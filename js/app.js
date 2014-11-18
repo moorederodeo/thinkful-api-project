@@ -1,5 +1,5 @@
 $(function () {
-	var fillerHeight = 120;
+	var fillerHeight = 50;
 	var mapWidth = $('.mapcontainer').width();
 	var height = $(window).height();
 	$('#gmap').width(mapWidth).height(height);
@@ -36,7 +36,7 @@ $(function () {
 	//get list of petitions
 	var getPetitions = function(sort, status) {
 		//figure out how to do this
-		$.getJSON(WeThePeopleURL + jsonpURL20, {
+		$.getJSON(WeThePeopleURL + jsonpURL, {
 			status: status,
 			format: "json"
 		})
@@ -56,9 +56,9 @@ $(function () {
 			//add the results to petitions
 			petitions = results;
 
-			console.log(petitions);
+			console.log(petitions.length);
 			//clear previous petitions
-			$('.petition').remove();
+			$('.petitions').children().remove();
 			//add new petitions to DOM
 			for (i in petitions) {
 				$('.petitions').append('<li class="petition" id="'+i+'"><h5 class="petition_title">'+petitions[i].title+'</h5><p>Signatures: '+petitions[i].signatureCount+'</p><a href="'+petitions[i].url+'">View Petition</a></li>');
@@ -129,7 +129,8 @@ $(function () {
 	$('select').change(function () {
 		var status = $('.status option:selected').text();
 		var sort = $('.sort option:selected').text();
-		//console.log(status);
+		//console.log(status)
+		//console.log(sort);
 		getPetitions(sort, status);
 	});
 

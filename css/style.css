@@ -11,6 +11,10 @@ body {
 	text-align: center;
 }
 
+.sort, .status {
+	display: none;
+}
+
 .petitions {
 	overflow:auto;
 	margin: 0 .5em;
