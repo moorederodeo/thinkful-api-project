@@ -1,5 +1,5 @@
 $(function () {
-	var fillerHeight = 50;
+	var fillerHeight = 120;
 	var mapWidth = $('.mapcontainer').width();
 	var height = $(window).height();
 	$('#gmap').width(mapWidth).height(height);
@@ -164,5 +164,6 @@ $(function () {
 		$('#gmap').width(mapWidth).height(height);
 		$('.navigation').height(height);
 		$('.petitions').height(height-fillerHeight);
+		$('.greyout').height(height);
 	});
 });
