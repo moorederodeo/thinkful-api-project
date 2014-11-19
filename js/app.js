@@ -127,8 +127,8 @@ $(function () {
 	});
 
 	$('select').change(function () {
-		var status = $('.status option:selected').text();
-		var sort = $('.sort option:selected').text();
+		var status = $('.status option:selected').val();
+		var sort = $('.sort option:selected').val();
 		//console.log(status)
 		//console.log(sort);
 		getPetitions(sort, status);
