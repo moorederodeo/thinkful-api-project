@@ -19,6 +19,8 @@ $(function () {
 		signatures = [];
 	var currentID;
 
+	var greyout = $('.greyout');
+
 	var WeThePeopleURL = "https://api.whitehouse.gov/v1/petitions";
 	var jsonpURL = '.jsonp?limit=1000&offset=0&callback=?';
 	var jsonpURL20 = '.jsonp?limit=20&offset=0&callback=?';
@@ -35,6 +37,7 @@ $(function () {
 
 	//get list of petitions
 	var getPetitions = function(sort, status) {
+		greyout.show();
 		//figure out how to do this
 		$.getJSON(WeThePeopleURL + jsonpURL, {
 			status: status,
@@ -63,10 +66,14 @@ $(function () {
 			for (i in petitions) {
 				$('.petitions').append('<li class="petition" id="'+i+'"><h5 class="petition_title">'+petitions[i].title+'</h5><p>Signatures: '+petitions[i].signatureCount+'</p><a href="'+petitions[i].url+'">View Petition</a></li>');
 			}
+			greyout.hide();
 		});
 	};
 
 	$('.petitions').on('click', '.petition', function (e) {
+		greyout.show();
+		$('.petition').removeClass('selected');
+		$(this).addClass("selected");
 		//draw corresponding points to 
 		//get petition id from corresponding petition
 		var id = $(this).attr("id");
@@ -122,7 +129,7 @@ $(function () {
 			}).Load();
 
 			//console.log(signatures);
-
+			greyout.hide();
 		});
 	});
 
